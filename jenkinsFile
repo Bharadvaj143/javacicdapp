@@ -17,5 +17,20 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
+        stage('Deploy war to tomacat') {
+            steps {
+                sh 'cp target/*.war ~/tomcat/apache-tomcat-10.1.52/webapps/'
+                sh 'cd ~/tomcat/apache-tomcat-10.1.52/bin && ./shutdown.sh'
+                sh 'cd ~/tomcat/apache-tomcat-10.1.52/bin && ./startup.sh'
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs.'
+        }
     }
 }
