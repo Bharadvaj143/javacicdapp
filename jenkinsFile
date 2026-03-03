@@ -1,0 +1,21 @@
+pipeline {
+
+    agent any
+    environment {
+        DOCKER_IMAGE = "bharadvajnanepalli/javacicdapp:latest"
+    }
+
+    Stages {
+        stage {
+            steps('Checkout') {
+                git branch: 'master', url: 'https://github.com/Bharadvaj143/javacicdapp.git'
+            }
+        }
+
+        stage('Build with Maven') {
+            steps('Build') {
+                sh 'mvn clean install'
+            }
+        }
+    }
+}
