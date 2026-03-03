@@ -6,14 +6,14 @@ pipeline {
     }
 
     stages {
-        stage {
-            steps('Checkout') {
+        stage('Checkout') {
+            steps {
                 git branch: 'master', url: 'https://github.com/Bharadvaj143/javacicdapp.git'
             }
         }
 
         stage('Build with Maven') {
-            steps('Build') {
+            steps {
                 sh 'mvn clean install'
             }
         }
