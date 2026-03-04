@@ -17,13 +17,6 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-        stage('Deploy war to tomacat') {
-            steps {
-                sh 'cp target/*.war /var/opt/tomcat/apache-tomcat-10.1.52/webapps/'
-                sh 'cd /var/opt/tomcat/apache-tomcat-10.1.52/bin && ./shutdown.sh'
-                sh 'cd /var/opt/tomcat/apache-tomcat-10.1.52/bin && ./startup.sh'
-            }
-        }
     }
     post {
         success {
