@@ -5,5 +5,5 @@ RUN mvn clean package -DskipTests
 FROM gcr.io/distroless/java17-debian12
 WORKDIR /app
 COPY --from=builder /app/target/javacicdapp-0.0.1-SNAPSHOT.war app.war
-EXPOSE 8082
+EXPOSE 8083
 CMD ["app.war"]
