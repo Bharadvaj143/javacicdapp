@@ -3,6 +3,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = "bharadvajnanepalli/javacicdapp:latest"
+        TOMCAT_HOME = "/home/bannu/tomcat/apache-tomcat-10.1.52"
     }
 
     stages {
@@ -15,6 +16,14 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 sh 'mvn clean install'
+            }
+        }
+        stage('Deploy to Tomcat') {
+            steps {
+                script {
+                    sh "cp target/*.war ${TOMCAT_HOME}/webapps/"
+                    sh "sudo systemctl restart tomcat"
+                }
             }
         }
     }
