@@ -4,6 +4,6 @@ COPY . .
 RUN mvn clean package -DskipTests
 FROM gcr.io/distroless/java17-debian12
 WORKDIR /app
-COPY --from=builder /app/target/javacicdapp-0.0.1-SNAPSHOT.war app.war
+COPY --from=builder /app/target/javacicdapp-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9090
-CMD ["java", "-jar", "app.war"]
+CMD ["java", "-jar", "app.jar"]
