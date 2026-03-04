@@ -11,12 +11,12 @@ pipeline {
             }
         }
 
-        stage('Build with Maven') {
+        /*stage('Build with Maven') {
             steps {
                 sh 'mvn clean install'
             }
         }
-        /*stage('Deploy to Tomcat') {
+        stage('Deploy to Tomcat') {
             steps {
                 deploy adapters: [
                     tomcat9(credentialsId: 'tomcat-creds',
@@ -31,16 +31,14 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build with both latest and build number tags
                     sh "docker build -t ${DOCKER_IMAGE}:latest -t ${DOCKER_IMAGE}:${BUILD_NUMBER} ."
-                    echo "Built Docker images: ${DOCKER_IMAGE}:latest and ${DOCKER_IMAGE}:${BUILD_NUMBER}"
                 }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'Dockerhub-credentials',
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials',
                                                 usernameVariable: 'DOCKER_USERNAME',
                                                 passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
@@ -53,11 +51,8 @@ pipeline {
         stage('Deploy Container') {
             steps {
                 script {
-                    // Stop old container if running
                     sh "docker rm -f javacicdapp || true"
-
-                    // Run new container from the pushed image
-                    sh "docker run -d --name javacicdapp -p 8081:8080 ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                    sh "docker run -d --name javacicdapp -p 8081:8082 ${DOCKER_IMAGE}:${BUILD_NUMBER}"
                 }
             }
         }
